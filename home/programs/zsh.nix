@@ -7,13 +7,19 @@
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
+    oh-my-zsh = {
+      enable = true;
+      theme = "af-magic";	
+    };
+
     shellAliases = {
       ll = "ls -l";
       la = "ls -a";
       ".." = "cd ..";
-      nixswitch = "sudo nixos-rebuild switch --flake ~/.dotfiles#";
+      nixswitch = "sudo nixos-rebuild switch --flake ~/.dotfiles#truffle";
       hm = "home-manager";
       hms = "home-manager switch -- flake ~/.dotfiles#";
+      macomydb = "systemctl start openvpn-mruVPN.service";
     };
   };
 

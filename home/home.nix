@@ -5,14 +5,16 @@
     ./programs/ghostty.nix
     ./programs/zsh.nix
     ./programs/git.nix
+    ./programs/fastfetch.nix
   ];
+
+  home.packages = with pkgs; [
+    obsidian
+  ];  
+
+  home.stateVersion = "25.05";
 
   # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
 
-  home.packages = with pkgs; [
-    gh
-  ];  
-
-  home.stateVersion = "25.05";
 }

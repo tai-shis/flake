@@ -1,3 +1,4 @@
+
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
@@ -15,13 +16,27 @@
   
 
   # Bootloader.
+
+  boot.loader.systemd-boot.enable = false;
+  #boot.loader.efi.canTouchEfiVariables = true;
   boot.loader = {
-    efi.canTouchEfiVariables = true;
+    efi = {
+      canTouchEfiVariables = true;
+    };
     grub = {
       enable = true;
-      devices = [ "nodev" ];
+      device = "nodev";
       efiSupport = true;
+      #efiInstallAsRemovable = true;
       useOSProber = true;
+    extraEntries = ''
+      menuentry "Virus" --class windows --class os {
+	insmod part_gpt
+	insmod fat
+	search --fs-uuid --set=root 5C18-CCC5
+	chainloader /EFI/Microsoft/Boot/bootmgfw.efi 
+      }
+    '';
     };
   };
 
@@ -75,6 +90,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.booky = {
     isNormalUser = true;
+    shell = pkgs.zsh;
     description = "booky";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
@@ -83,13 +99,31 @@
     ];
   };
 
+  programs.zsh.enable = true;
+  users.defaultUserShell = pkgs.zsh;
+
   # Install firefox.
   programs.firefox.enable = true;
 
   environment.systemPackages = with pkgs; [
     emacs
     wget
+    # TODO: move below packages into separate files and import. below should also have the configs for them
+    fprintd
+    openvpn
   ];
+ 
+  services.fprintd = {
+    enable = true;
+    tod.driver = pkgs.libfprint-2-tod1-goodix;
+  };
+
+  services.openvpn.servers = {
+    mruVPN = {
+      config = ''config /home/booky/.config/openvpn/macovpn-config.ovpn'';
+      autoStart = false;
+    };
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
