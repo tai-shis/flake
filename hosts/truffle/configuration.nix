@@ -27,8 +27,8 @@
       enable = true;
       device = "nodev";
       efiSupport = true;
-      #efiInstallAsRemovable = true;
-      useOSProber = true;
+      # efiInstallAsRemovable = true;
+      # useOSProber = true;
     extraEntries = ''
       menuentry "Virus" --class windows --class os {
 	insmod part_gpt

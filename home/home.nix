@@ -5,7 +5,7 @@
     ./programs/ghostty.nix
     ./programs/zsh.nix
     ./programs/git.nix
-    ./programs/fastfetch.nix
+    ./programs/fastfetch/fastfetch.nix
   ];
 
   home.packages = with pkgs; [
