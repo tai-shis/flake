@@ -19,8 +19,9 @@
       nixswitch = "sudo nixos-rebuild switch --flake ~/.dotfiles#truffle";
       hm = "home-manager";
       hms = "home-manager switch -- flake ~/.dotfiles#";
-      macomydb = "systemctl start openvpn-mruVPN.service";
-    };
+      startMruVPN = "systemctl start openvpn-mruVPN.service";
+      stopMruVPN = "systemctl stop openvpn-officeVPN.service"; 
+   };
   };
 
   home.sessionVariables.SHELL = "${pkgs.zsh}/bin/zsh";

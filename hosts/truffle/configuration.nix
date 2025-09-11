@@ -111,6 +111,7 @@
     # TODO: move below packages into separate files and import. below should also have the configs for them
     fprintd
     openvpn
+    openvpn3
   ];
  
   services.fprintd = {
