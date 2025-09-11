@@ -106,7 +106,6 @@
   programs.firefox.enable = true;
 
   environment.systemPackages = with pkgs; [
-    emacs
     wget
     # TODO: move below packages into separate files and import. below should also have the configs for them
     fprintd
@@ -124,6 +123,11 @@
       config = ''config /home/booky/.config/openvpn/macovpn-config.ovpn'';
       autoStart = false;
     };
+  };
+
+  nix.gc = {
+    automatic = true;
+    options = "--delete-older-than 30d";
   };
 
   # Some programs need SUID wrappers, can be configured further or are

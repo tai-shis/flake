@@ -2,10 +2,12 @@
 
 {
   imports = [
-    ./programs/ghostty.nix
-    ./programs/zsh.nix
-    ./programs/git.nix
-    ./programs/fastfetch/fastfetch.nix
+    ./ghostty.nix
+    ./zsh.nix
+    ./git.nix
+    ./direnv.nix
+    ./fastfetch/fastfetch.nix
+    ./emacs/emacs.nix
   ];
 
   home.packages = with pkgs; [

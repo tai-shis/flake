@@ -10,19 +10,28 @@
     oh-my-zsh = {
       enable = true;
       theme = "af-magic";	
+      plugins = [
+	"direnv"
+      ];
     };
 
     shellAliases = {
       ll = "ls -l";
-      la = "ls -a";
+      ls = "ls -a";
       ".." = "cd ..";
       nixswitch = "sudo nixos-rebuild switch --flake ~/.dotfiles#truffle";
       hm = "home-manager";
       hms = "home-manager switch -- flake ~/.dotfiles#";
       startMruVPN = "systemctl start openvpn-mruVPN.service";
       stopMruVPN = "systemctl stop openvpn-officeVPN.service"; 
-   };
-  };
+    };
 
+    initContent = ''
+      if [[ -o interactive ]]; then
+        fastfetch
+      fi
+    '';
+  
+  };
   home.sessionVariables.SHELL = "${pkgs.zsh}/bin/zsh";
 }
