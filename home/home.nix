@@ -12,6 +12,7 @@
 
   home.packages = with pkgs; [
     obsidian
+    python3
   ];  
 
   programs.vscode.enable = true;

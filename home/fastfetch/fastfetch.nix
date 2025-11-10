@@ -23,12 +23,12 @@
 	"break"
 	{
 	  type = "custom";
-	  format = "┌────────────────────── Framework Laptop 13 ─────────────────────┐";
+	  format = "┌───────── Framework Laptop 13 ──────────────────────────────────┐";
 	  outputColor = "#00A86B";
 	}
 	{
 	  type = "host";
-	  key = "  PC";
+	  key = " PC";
 	  keyColor = "#00A86B";
 	}
 	{
@@ -66,7 +66,7 @@
 	"break"
 	{
           type = "custom";
-          format = "┌───────────────────────────── NixOS ────────────────────────────┐";
+          format = "┌───────── NixOS ────────────────────────────────────────────────┐";
 	  outputColor = "blue";
 	}
 	{

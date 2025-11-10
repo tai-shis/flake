@@ -111,6 +111,12 @@
     fprintd
     openvpn
     openvpn3
+
+    (discord.override {
+      withOpenASAR = true;
+      withVencord = true;
+    })
+    vesktop
   ];
  
   services.fprintd = {
@@ -123,6 +129,15 @@
       config = ''config /home/booky/.config/openvpn/macovpn-config.ovpn'';
       autoStart = false;
     };
+  };
+
+  virtualisation.docker = {
+    enable = true;   
+  };
+
+  users.users.booky = {
+    isNormalUser = true;
+    extraGroups = [ "docker" ];
   };
 
   nix.gc = {
