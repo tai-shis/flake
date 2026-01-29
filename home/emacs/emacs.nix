@@ -6,6 +6,12 @@
     ./languages.nix
   ];
 
+  home.packages = with pkgs; [
+    nil
+    rust-analyzer
+    haskell-language-server    
+  ];
+
   programs.zsh.shellAliases = {
     emacs = "emacs -nw";
   };
@@ -22,6 +28,25 @@
       nord-theme
       doom-modeline
       # ... other packages
+
+      # Language modes
+      nix-mode
+      rust-mode
+      haskell-mode
+
+      # LSP support
+      lsp-mode
+      lsp-ui
+      lsp-haskell
+
+      # Completion
+      company
+
+      direnv
+
+      flycheck
+      treemacs
+      magit
     ];
   };
 }

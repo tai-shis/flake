@@ -2,8 +2,7 @@
 
 {
   imports = [
-    ./ghostty.nix
-    ./zsh.nix
+    ./terminal/default.nix
     ./git.nix
     ./direnv.nix
     ./fastfetch/fastfetch.nix
@@ -12,7 +11,7 @@
 
   home.packages = with pkgs; [
     obsidian
-    python3
+    ghc
   ];  
 
   programs.vscode.enable = true;

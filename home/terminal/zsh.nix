@@ -23,7 +23,8 @@
       hm = "home-manager";
       hms = "home-manager switch -- flake ~/.dotfiles#";
       startMruVPN = "systemctl start openvpn-mruVPN.service";
-      stopMruVPN = "systemctl stop openvpn-officeVPN.service"; 
+      stopMruVPN = "systemctl stop openvpn-officeVPN.service";
+      pyenv = "source .venv/bin/activate";
     };
 
     initContent = ''

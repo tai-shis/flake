@@ -43,6 +43,8 @@
   networking = {
     hostName = "truffle";
     firewall.enable = true;
+    firewall.allowedTCPPorts = [ 5173 ];
+    firewall.allowedUDPPorts = [ 5173 ];
     networkmanager = {
       enable = true;
       wifi.powersave = false;
@@ -92,7 +94,7 @@
     isNormalUser = true;
     shell = pkgs.zsh;
     description = "booky";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [
       kdePackages.kate
     #  thunderbird
@@ -112,11 +114,10 @@
     openvpn
     openvpn3
 
-    (discord.override {
-      withOpenASAR = true;
-      withVencord = true;
-    })
-    vesktop
+    wineWowPackages.stable
+
+    discord
+    wl-clipboard-x11
   ];
  
   services.fprintd = {
@@ -133,11 +134,6 @@
 
   virtualisation.docker = {
     enable = true;   
-  };
-
-  users.users.booky = {
-    isNormalUser = true;
-    extraGroups = [ "docker" ];
   };
 
   nix.gc = {
