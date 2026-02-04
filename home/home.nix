@@ -7,6 +7,7 @@
     ./direnv.nix
     ./fastfetch/fastfetch.nix
     ./emacs/emacs.nix
+    ./vicinae.nix
   ];
 
   home.packages = with pkgs; [
