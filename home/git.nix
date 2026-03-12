@@ -3,7 +3,11 @@
 {
   programs.git = {
     enable = true;
-    userName = "tai-shis";
-    userEmail = "tshis070@mtroyal.ca";
+    settings = {
+      user = {
+        name = "tai-shis";
+        email = "tshis070@mtroyal.ca";
+      };
+    };
   };
 }

@@ -122,6 +122,8 @@
     xwayland-satellite
     alacritty
 
+    btop
+    
     inputs.noctalia.packages.${system}.default
     inputs.awww.packages.${system}.default
     nh
