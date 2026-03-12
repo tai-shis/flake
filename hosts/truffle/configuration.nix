@@ -3,7 +3,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ inputs, system, pkgs, ... }:
 
 {
   imports =
@@ -118,6 +118,13 @@
 
     discord
     wl-clipboard-x11
+    
+    xwayland-satellite
+    alacritty
+
+    inputs.noctalia.packages.${system}.default
+    inputs.awww.packages.${system}.default
+    nh
   ];
  
   services.fprintd = {
@@ -141,6 +148,15 @@
     options = "--delete-older-than 30d";
   };
 
+  programs.niri = {
+    enable = true;
+
+    package = inputs.niri.packages.${system}.niri;
+  };
+
+  
+
+  
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;

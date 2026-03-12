@@ -19,7 +19,7 @@
       ll = "ls -l";
       ls = "ls -a";
       ".." = "cd ..";
-      nixswitch = "sudo nixos-rebuild switch --flake ~/.dotfiles#truffle";
+      nixswitch = "nh os switch /home/booky/.dotfiles ";
       hm = "home-manager";
       hms = "home-manager switch -- flake ~/.dotfiles#";
       startMruVPN = "systemctl start openvpn-mruVPN.service";

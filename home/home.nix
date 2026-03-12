@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -8,8 +8,7 @@
     ./fastfetch/fastfetch.nix
     ./emacs/emacs.nix
     ./vicinae.nix
-    ./niri.nix
-  ];
+ ];
 
   home.packages = with pkgs; [
     obsidian
