@@ -5,8 +5,8 @@
       font-size = 12;
       font-family = "MesloGS Nerd Font";
 
-      window-width = 90;
-      window-height = 24;      
+      window-width = 132;
+      window-height = 46;      
 
       window-padding-x = 12;
       window-padding-y = 12;

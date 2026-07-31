@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    nixpkgs-fresh.url =  "github:nixos/nixpkgs?ref=nixos-unstable";
     
     home-manager = {
       url = "github:nix-community/home-manager";    
@@ -14,14 +15,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    niri = {
-      type = "github";
-      owner = "niri-wm";
-      repo = "niri";
-      ref = "wip/branch";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
+    #niri = {
+    #  type = "github";
+    #  owner = "niri-wm";
+    #  repo = "niri";
+    #  inputs.nixpkgs.follows = "nixpkgs";
+    #};
+    
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -37,10 +37,13 @@
       url = "git+https://codeberg.org/LGFae/awww";
       inputs.nixpkgs.follows = "nixpkgs";      
     };
+
+    llm-agents.url = "github:numtide/llm-agents.nix";
   };
 
   outputs = { 
     nixpkgs,
+    nixpkgs-fresh,
     ... 
   }@inputs: {
     nixosConfigurations = {
@@ -50,6 +53,12 @@
 	      specialArgs = {
           inherit inputs;
           system = "x86_64-linux";
+          
+          pkgs-fresh = import inputs.nixpkgs-fresh {
+            system = "x86_64-linux";
+            config.allowUnfree = true;
+          };
+
         };
 
         modules = [

@@ -3,7 +3,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ inputs, system, pkgs, ... }:
+{ inputs, system, pkgs, pkgs-fresh, ... }:
 
 {
   imports =
@@ -13,6 +13,7 @@
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.permittedInsecurePackages = [ "pnpm-10.29.2" ];
   
 
   # Bootloader.
@@ -114,9 +115,8 @@
     openvpn
     openvpn3
 
-    wineWowPackages.stable
-
     discord
+    vesktop
     wl-clipboard-x11
     
     xwayland-satellite
@@ -127,7 +127,20 @@
     inputs.noctalia.packages.${system}.default
     inputs.awww.packages.${system}.default
     nh
-  ];
+
+    bun
+  ] ++ (with inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}; [
+    claude-code
+    crush
+    pi
+    code-review-graph
+    coderabbit-cli
+
+    claude-plugins
+    skills
+    skills-installer
+    # ... other tools
+  ]);
  
   services.fprintd = {
     enable = true;
@@ -153,10 +166,18 @@
   programs.niri = {
     enable = true;
 
-    package = inputs.niri.packages.${system}.niri;
+    package = pkgs-fresh.niri;
   };
 
-  
+  # Workaround for AMD audio issues on some systems
+  # Note: make sure "Analog Studio Duplex" is selected in the Configuration Profile
+  # for Family 17h/19h/1ah HD Audio Controller and that the gain is at 50%
+  services.pipewire.wireplumber.extraConfig.no-ucm = {
+    "monitor.alsa.properties" = {
+      "alsa.use-ucm" = false;
+    };
+  };
+
 
   
   # Some programs need SUID wrappers, can be configured further or are
