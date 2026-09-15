@@ -1,0 +1,210 @@
+
+# Edit this configuration file to define what should be installed on
+# your system.  Help is available in the configuration.nix(5) man page
+# and in the NixOS manual (accessible by running ‘nixos-help’).
+
+{ inputs, system, pkgs, pkgs-fresh, ... }:
+
+{
+  imports =
+    [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
+    ];
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.permittedInsecurePackages = [ "pnpm-10.29.2" ];
+  
+
+  # Bootloader.
+
+  boot.loader.systemd-boot.enable = false;
+  #boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader = {
+    efi = {
+      canTouchEfiVariables = true;
+    };
+    grub = {
+      enable = true;
+      device = "nodev";
+      efiSupport = true;
+      # efiInstallAsRemovable = true;
+      # useOSProber = true;
+    extraEntries = ''
+      menuentry "Virus" --class windows --class os {
+	insmod part_gpt
+	insmod fat
+	search --fs-uuid --set=root 5C18-CCC5
+	chainloader /EFI/Microsoft/Boot/bootmgfw.efi 
+      }
+    '';
+    };
+  };
+
+  networking = {
+    hostName = "truffle";
+    firewall.enable = true;
+    firewall.allowedTCPPorts = [ 5173 ];
+    firewall.allowedUDPPorts = [ 5173 ];
+    networkmanager = {
+      enable = true;
+      wifi.powersave = false;
+      wifi.scanRandMacAddress = false;
+    };
+  };
+
+  time.timeZone = "America/Edmonton";
+  i18n.defaultLocale = "en_CA.UTF-8";
+
+  services.xserver.enable = true;
+
+  # For KDE Plasma
+  services.displayManager.sddm.enable = true;
+  services.desktopManager.plasma6.enable = true;
+
+  # Configure keymap in X11
+  services.xserver.xkb = {
+    layout = "us";
+    variant = "";
+  };
+
+  # Enable CUPS to print documents.
+  services.printing.enable = true;
+
+  # Enable sound with pipewire.
+  services.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # If you want to use JACK applications, uncomment this
+    #jack.enable = true;
+
+    # use the example session manager (no others are packaged yet so this is enabled by default,
+    # no need to redefine it in your config for now)
+    #media-session.enable = true;
+  };
+
+  # Enable touchpad support (enabled default in most desktopManager).
+  # services.xserver.libinput.enable = true;
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.users.booky = {
+    isNormalUser = true;
+    shell = pkgs.zsh;
+    description = "booky";
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
+    packages = with pkgs; [
+      kdePackages.kate
+    #  thunderbird
+    ];
+  };
+
+  programs.zsh.enable = true;
+  users.defaultUserShell = pkgs.zsh;
+
+  # Install firefox.
+  programs.firefox.enable = true;
+
+  environment.systemPackages = with pkgs; [
+    wget
+    # TODO: move below packages into separate files and import. below should also have the configs for them
+    fprintd
+    openvpn
+    openvpn3
+
+    discord
+    vesktop
+    wl-clipboard-x11
+    
+    xwayland-satellite
+    alacritty
+
+    btop
+    
+    inputs.noctalia.packages.${system}.default
+    inputs.awww.packages.${system}.default
+    nh
+
+    bun
+  ] ++ (with inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}; [
+    claude-code
+    crush
+    pi
+    code-review-graph
+    coderabbit-cli
+
+    claude-plugins
+    skills
+    skills-installer
+    # ... other tools
+  ]);
+ 
+  services.fprintd = {
+    enable = true;
+    tod.driver = pkgs.libfprint-2-tod1-goodix;
+  };
+
+  services.openvpn.servers = {
+    mruVPN = {
+      config = ''config /home/booky/.config/openvpn/macovpn-config.ovpn'';
+      autoStart = false;
+    };
+  };
+
+  virtualisation.docker = {
+    enable = true;   
+  };
+
+  nix.gc = {
+    automatic = true;
+    options = "--delete-older-than 30d";
+  };
+
+  programs.niri = {
+    enable = true;
+
+    package = pkgs-fresh.niri;
+  };
+
+  # Workaround for AMD audio issues on some systems
+  # Note: make sure "Analog Studio Duplex" is selected in the Configuration Profile
+  # for Family 17h/19h/1ah HD Audio Controller and that the gain is at 50%
+  services.pipewire.wireplumber.extraConfig.no-ucm = {
+    "monitor.alsa.properties" = {
+      "alsa.use-ucm" = false;
+    };
+  };
+
+
+  
+  # Some programs need SUID wrappers, can be configured further or are
+  # started in user sessions.
+  # programs.mtr.enable = true;
+  # programs.gnupg.agent = {
+  #   enable = true;
+  #   enableSSHSupport = true;
+  # };
+
+  # List services that you want to enable:
+
+  # Enable the OpenSSH daemon.
+  # services.openssh.enable = true;
+
+  # Open ports in the firewall.
+  # networking.firewall.allowedTCPPorts = [ ... ];
+  # networking.firewall.allowedUDPPorts = [ ... ];
+  # Or disable the firewall altogether.
+  # networking.firewall.enable = false;
+
+  # This value determines the NixOS release from which the default
+  # settings for stateful data, like file locations and database versions
+  # on your system were taken. It‘s perfectly fine and recommended to leave
+  # this value at the release version of the first install of this system.
+  # Before changing this value read the documentation for this option
+  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  system.stateVersion = "25.05"; # Did you read the comment?
+
+}
